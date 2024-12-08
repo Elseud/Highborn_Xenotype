@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+
+<!--Head-->
+
+<GeneDef ParentName="GeneJawBase">
+    <defName>HBX_DaintyHead</defName>
+    <label>Dainty features</label>
+    <description>Pawns with this gene have delicate, feminine facial features.</description>
+    <iconPath>UI/Gene_DaintyFeatures</iconPath>
+    <forcedHeadTypes>
+      <li>Male_DaintyNormal</li>
+	  <li>Female_DaintyNormal</li>
+    </forcedHeadTypes>
+    <displayOrderInCategory>96</displayOrderInCategory>
+  </GeneDef>
+
+  <HeadTypeDef Name="DaintyJawBase" Abstract="True">
+    <randomChosen>false</randomChosen>
+    <requiredGenes>
+      <li>HBX_DaintyHead</li>
+    </requiredGenes>
+  </HeadTypeDef>
+
+ <HeadTypeDef ParentName="DaintyJawBase">
+    <defName>Male_DaintyNormal</defName>
+    <graphicPath>Things/Parts/DaintyHead/Head_Male</graphicPath>
+    <gender>Male</gender>
+  </HeadTypeDef>
+
+  <HeadTypeDef ParentName="DaintyJawBase">
+    <defName>Female_DaintyNormal</defName>
+    <graphicPath>Things/Parts/DaintyHead/Head_Female</graphicPath>
+    <gender>Female</gender>
+  </HeadTypeDef>
+  
+   <GeneDef>
+    <defName>HBX_Haughty</defName>
+    <label>Haughty</label>
+    <labelShortAdj>haughty</labelShortAdj>
+    <description>Carriers of this gene always demand the finest luxuries, and cannot stand the thought of somebody having it better than them.</description>
+    <iconPath>UI/Gene_Haughty</iconPath>
+    <displayCategory>Miscellaneous</displayCategory>
+    <displayOrderInCategory>61</displayOrderInCategory>
+	<exclusionTags>
+		<li MayRequire="det.boglegs">DV_Materialistic</li>
+	</exclusionTags>
+    <forcedTraits>
+      <li>
+        <def>Jealous</def>
+      </li>
+    </forcedTraits>
+	  <biostatCpx>1</biostatCpx>
+    <biostatMet>2</biostatMet>
+  </GeneDef>
+  
+  <GeneDef>
+    <defName>HBX_Fencer</defName>
+    <label>Fencer</label>
+    <description>Carriers of this gene have strong reflexes and natural affinity for melee combat, letting them hit even the most slippery opponents while avoiding harm themselves.</description>
+    <iconPath>UI/Gene_Duelist</iconPath>
+    <displayCategory>Violence</displayCategory>
+	<biostatCpx>1</biostatCpx>
+    <biostatMet>-2</biostatMet>
+    <displayOrderInCategory>50</displayOrderInCategory>
+	<exclusionTags>
+		<li>ViolenceDisabled</li>
+	</exclusionTags>
+	<statFactors>
+        <MeleeDodgeChance>1.2</MeleeDodgeChance>
+		<MeleeHitChance>1.2</MeleeHitChance>
+    </statFactors>
+  </GeneDef>	
+  
+  <GeneDef MayRequire="EBSG.Framework">
+		<defName>HBX_LesserDeaths</defName>
+		<geneClass>EBSGFramework.HediffAdder</geneClass>
+		<label>lesser deaths</label>
+		<description>Carriers of this gene are born with a reserve of non-replenishable reconstructor cells of mysterious make. As the carrier nears death, the cells activate, putting their body into the state of suspended animation while they repair the damage. As the cells cannot fully repair neural structures, the carrier will only be revived if their brain remains intact. Furthermore, each revive applies a stacking -10% conciousness malus.</description>
+		<customEffectDescriptions>
+           <li>Grants 2 revives. Revives trigger only if the brain is intact, taking 24 hours to complete, and apply a stacking -10% conciousness malus upon completion.</li>
+        </customEffectDescriptions>
+		<iconPath>UI/Gene_LesserDeaths</iconPath>
+		<displayCategory>Miscellaneous</displayCategory>
+		<displayOrderInCategory>130</displayOrderInCategory>
+		<biostatCpx>3</biostatCpx>
+		<biostatMet>-3</biostatMet>
+		<modExtensions>
+	    <li Class="EBSGFramework.EBSGExtension">
+        <hediffsToApply>
+          <li>
+            <hediff>HBX_LesserDeaths</hediff>
+            <onlyIfNew>true</onlyIfNew>
+            <severity>1</severity>
+          </li>
+        </hediffsToApply>
+        <vanishingGene>false</vanishingGene>
+	    </li>
+	</modExtensions>
+	</GeneDef>
+
+  <HediffDef>
+    <defName>HBX_LesserDeaths</defName>
+    <label>lesser deaths</label>
+    <description>Reserve of reconstructor cells ready to revive the body in the event of death. While powerful, they cannot fully fully repair neural structures, and as such, cannot work if it is destroyed. Each revive permanently damages critical neural pathways, decreasing conciousness.</description>
+    <isBad>false</isBad>
+    <hediffClass>HediffWithComps</hediffClass>
+    <everCurableByItem>false</everCurableByItem>
+	<scenarioCanAdd>false</scenarioCanAdd>
+	<minSeverity>0.01</minSeverity>
+	<maxSeverity>1</maxSeverity>
+    <initialSeverity>1</initialSeverity>
+	<stages>
+            <li>
+                <label>two lesser deaths</label>
+                <minSeverity>0.01</minSeverity>
+				<capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <offset>-0.2</offset>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <label>one lesser death</label>
+                <minSeverity>0.5</minSeverity>
+                <capMods>
+                    <li>
+                        <capacity>Consciousness</capacity>
+                        <offset>-0.1</offset>
+                    </li>
+                </capMods>
+            </li>
+            <li>
+                <label>no lesser deaths</label>
+                <minSeverity>1</minSeverity>
+            </li>
+        </stages>
+    <comps>
+      <li Class="EBSGFramework.HediffCompProperties_MultipleLives">
+        <extraLives>2</extraLives>
+        <hoursToRevive>24</hoursToRevive>
+		<needBrainToRevive>true</needBrainToRevive>
+		<useSeverityNotDays>true</useSeverityNotDays>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <GeneDef>
+    <defName>HBX_Choosy</defName>
+    <label>choosy</label>
+    <labelShortAdj>choosy</labelShortAdj>
+    <description>Carriers of this gene are very picky when it comes to their romantic partners, and notoriously hard to court. Only the most attractive and socially adept can hope to win their hearts.</description>
+    <customEffectDescriptions>
+           <li>Only pawns with >0 beauty and >100% social impact will be considered as possible romantic partners.</li>
+    </customEffectDescriptions>
+	<iconPath>UI/Gene_Choosy</iconPath>
+    <displayCategory>Miscellaneous</displayCategory>
+    <displayOrderInCategory>60</displayOrderInCategory>
+	  <biostatCpx>1</biostatCpx>
+    <biostatMet>1</biostatMet>
+    <modExtensions>
+      <li Class="EBSGFramework.GRCExtension">
+        <otherStats>
+          <li>PawnBeauty</li>
+          <li>SocialImpact</li>
+        </otherStats>
+      </li>
+    </modExtensions>
+  </GeneDef>
+
+  <GeneDef>
+		<defName>HBX_Manipulative</defName>
+		<label>manipulative</label>
+		<description>Carriers of this gene are born social butterflies, and enjoy using their talents to manipulate those around them through gossip in search of amusement.</description>
+		<customEffectDescriptions>
+           <li>Allows to engage in a special "gossip" social interaction with another pawn, changing their opinion of a random colonist to change in range from -10 to 10.</li>
+        </customEffectDescriptions>
+		<iconPath>UI/Gene_Manipulative</iconPath>
+		<displayCategory>Miscellaneous</displayCategory>
+		<displayOrderInCategory>128</displayOrderInCategory>
+		<geneClass>SocialGene.Gene_SocialAffectRandom</geneClass>
+		<biostatCpx>1</biostatCpx>
+		<biostatMet>0</biostatMet>
+		<statOffsets>
+			<SocialImpact>0.15</SocialImpact>
+			<SlaveSuppressionOffset MayRequire="Ludeon.RimWorld.Ideology">-0.3</SlaveSuppressionOffset>
+		</statOffsets>
+		<modExtensions>
+			<li Class="SocialGene.GeneExtension_SocialAffectRandom">
+				<intervalRange>600~1200</intervalRange>
+				<interactionDef>HBX_Gossip_Interaction</interactionDef>
+				<thoughtDef>HBX_Gossip_Target</thoughtDef>
+			</li>
+		</modExtensions>
+	</GeneDef>
+
+
+	<InteractionDef>
+		<defName>HBX_Gossip_Interaction</defName>
+		<label>gossip</label>
+		<symbol>Things/SpeechSymbols/HBX_Gossip</symbol>
+		<initiatorThought>HBX_Gossip_Thought</initiatorThought>
+		<initiatorXpGainSkill>Social</initiatorXpGainSkill>
+		<initiatorXpGainAmount>10</initiatorXpGainAmount>
+		<recipientThought>HBX_Gossip_Thought</recipientThought>
+		<logRulesInitiator>
+			<rulesStrings>
+				<li>r_logentry->[INITIATOR_nameDef] and [RECIPIENT_nameDef] exchanged gossip.</li>
+        <li>r_logentry->[INITIATOR_nameDef] shared a secret with [RECIPIENT_nameDef].</li>
+        <li>r_logentry->With a wry look, [INITIATOR_nameDef] told [RECIPIENT_nameDef] a rumor about a fellow colonist.</li>
+			</rulesStrings>
+		</logRulesInitiator>
+	</InteractionDef>
+  
+	<ThoughtDef>
+		<defName>HBX_Gossip_Thought</defName>
+		<thoughtClass>Thought_MemorySocialCumulative</thoughtClass>
+		<stackLimit>1</stackLimit>
+		<durationDays>1</durationDays>
+		<maxCumulatedOpinionOffset>5</maxCumulatedOpinionOffset>
+		<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+		<socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+		<nullifyingTraits>
+			<li>Psychopath</li>
+		</nullifyingTraits>
+		<nullifyingHediffs>
+			<li MayRequire="Ludeon.RimWorld.Anomaly">Inhumanized</li>
+		</nullifyingHediffs>
+		<stages>
+			<li>
+				<label>gossiped with</label>
+				<baseOpinionOffset>2</baseOpinionOffset>
+			</li>
+		</stages>
+	</ThoughtDef>
+	
+	<ThoughtDef>
+		<defName>HBX_Gossip_Target</defName>
+		<thoughtClass>SocialGene.Thought_MemorySocialGeneSpecial</thoughtClass>
+		<stackLimit>1</stackLimit>
+		<durationDays>5</durationDays>
+		<maxCumulatedOpinionOffset>10</maxCumulatedOpinionOffset>
+		<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+		<socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+		<nullifyingTraits>
+			<li>Psychopath</li>
+		</nullifyingTraits>
+		<nullifyingHediffs>
+			<li MayRequire="Ludeon.RimWorld.Anomaly">Inhumanized</li>
+		</nullifyingHediffs>
+		<stages>
+			<li>
+				<label>target of gossip</label>
+				<!-- <baseOpinionOffset>1</baseOpinionOffset> -->
+			</li>
+		</stages>
+	</ThoughtDef>
+
+</Defs>
